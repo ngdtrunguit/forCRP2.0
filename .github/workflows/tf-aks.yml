@@ -80,6 +80,7 @@ jobs:
         files: terraform.tfvars
         replacements: __subscriptionid__=${{ env.ARM_SUBSCRIPTION_ID }},__tenant_id__=${{ env.ARM_TENANT_ID }},__client_id__=${{ env.ARM_CLIENT_ID }}',__client_secret__=${{ env.ARM_CLIENT_SECRET }}'
       working-directory: TF-aks
+      
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
