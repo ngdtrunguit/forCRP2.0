@@ -77,10 +77,9 @@ jobs:
     - name: Replace Variables in terraform.tfvars
       uses: datamonsters/replace-action@v2
       with:
-        files: terraform.tfvars
+        files: TF-aks/terraform.tfvars
         replacements: __subscriptionid__=${{ env.ARM_SUBSCRIPTION_ID }},__tenant_id__=${{ env.ARM_TENANT_ID }},__client_id__=${{ env.ARM_CLIENT_ID }}',__client_secret__=${{ env.ARM_CLIENT_SECRET }}'
-      working-directory: TF-aks
-      
+
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
