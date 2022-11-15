@@ -21,8 +21,8 @@ output "client_certificate" {
   sensitive = true
 }
 output "cluster_ca_certificate" {
-  sensitive   = true
-  value       = azurerm_kubernetes_cluster.aks.kube_config[0].cluster_ca_certificate
+  sensitive = true
+  value     = azurerm_kubernetes_cluster.aks.kube_config[0].cluster_ca_certificate
 }
 
 output "kube_config" {
