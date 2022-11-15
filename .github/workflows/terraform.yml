@@ -111,7 +111,10 @@ jobs:
     # - name: Terraform Apply
     #   #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
     #   run: terraform apply -auto-approve out.plan
-
+    - name: Show Destroy plan
+      run: terraform plan -destroy
+      continue-on-error: true
+      
     - name: Terraform Destroy
       #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
       run: terraform destroy -auto-approve
