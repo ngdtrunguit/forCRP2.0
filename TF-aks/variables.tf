@@ -14,13 +14,24 @@ variable "resource_group_name" {
 variable "location" {
   default = "eastus"
 }
-variable "client_id" {
-  default = "8d438cd7-e9ae-4f1b-8bd3-a2bc0a274da0"
-}
-variable "client_secret" {
-  default = "NW6V_n1avBcfZnm7TUqbZ6v-L9bs8mJYOC"
-}
+
 variable "tags" {
   type    = map(string)
   default = { Environment = "CRP2-AKS-Demo" }
+}
+variable "client_secret" {
+  type      = string
+  sensitive = true
+}
+
+variable "client_id" {
+  type = string
+}
+
+variable "tenant_id" {
+  type = string
+}
+
+variable "subscription_id" {
+  type = string
 }
