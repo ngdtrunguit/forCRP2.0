@@ -22,7 +22,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
   #   client_id     = var.client_id
   #   client_secret = var.client_secret
   # }
-
+  identity {
+    type = "SystemAssigned"
+  }
   role_based_access_control_enabled = true
 
   tags = var.tags
