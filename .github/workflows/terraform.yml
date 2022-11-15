@@ -49,8 +49,8 @@ on:
     branches: [ "main" ]
   pull_request:
 
-permissions:
-  contents: read
+# permissions:
+#   contents: read
 env: 
   ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
@@ -101,20 +101,9 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan -out out.plan -var-file="terraform.tfvars"
-            #  -backend-config="subscription_id=$ARM_SUBSCRIPTION_ID"
-            #  -backend-config="tenant_id=$ARM_TENANT_ID"
-            #  -backend-config="client_id=$ARM_CLIENT_ID"
-            #  -backend-config="client_secret=$ARM_CLIENT_SECRET"
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
       # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
-    # - name: Terraform Apply
-    #   #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-    #   run: terraform apply -auto-approve out.plan
-    - name: Show Destroy plan
-      run: terraform plan -destroy
-      continue-on-error: true
-
-    - name: Terraform Destroy
+    - name: Terraform Apply
       #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-      run: terraform destroy -auto-approve -var-file="terraform.tfvars"
+      run: terraform apply -auto-approve out.plan
