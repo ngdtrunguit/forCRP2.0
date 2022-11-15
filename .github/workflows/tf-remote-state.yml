@@ -2,19 +2,9 @@ name: 'terraform-remote-state'
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - "/*"
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
-  workflow_dispatch: #this attribute will enable the manual run to the pipeline
-  workflow_call:
-    inputs:
-      ROOT_PATH:
-        type: string
-        required: true
+  workflow_dispatch:
    
 # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
 defaults:
@@ -46,8 +36,6 @@ jobs:
         terraform_version: 1.3.4
     - name: terraform init
       run: terraform init
-      working-directory: ${{github.workspace}}${{ inputs.ROOT_PATH }}
 
     - name: terraform Plan
       run: terraform plan 
-      working-directory: ${{github.workspace}}${{ inputs.ROOT_PATH }}

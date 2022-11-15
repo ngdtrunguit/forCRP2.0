@@ -9,6 +9,9 @@ terraform {
 
 provider "azurerm" {
   features {}
+
+  subscription_id = "52948927-413b-4dab-8037-1499505c03b8"
+  tenant_id       = "6f2aaa26-87fe-4a48-a779-49d686893e4c"
 }
 
 resource "azurerm_resource_group" "tfstate" {
