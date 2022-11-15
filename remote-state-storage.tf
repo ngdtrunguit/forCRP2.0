@@ -13,7 +13,7 @@ provider "azurerm" {
   subscription_id = "52948927-413b-4dab-8037-1499505c03b8"
   tenant_id       = "6f2aaa26-87fe-4a48-a779-49d686893e4c"
   client_id       = "c93a32de-17f7-4a67-86f0-d766647a3bbd"
-  client_secret    = "K5Lc_4XrY9w~CCfQW5th6SULFRQtIh_mKO"
+  client_secret   = "K5Lc_4XrY9w~CCfQW5th6SULFRQtIh_mKO"
 }
 
 resource "azurerm_resource_group" "tfstate" {
