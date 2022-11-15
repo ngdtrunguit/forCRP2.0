@@ -96,10 +96,8 @@ jobs:
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check
-             -backend-config="subscription_id=$ARM_SUBSCRIPTION_ID"
-             -backend-config="tenant_id=$ARM_TENANT_ID"
-             -backend-config="client_id=$ARM_CLIENT_ID"
-             -backend-config="client_secret=$ARM_CLIENT_SECRET"
+      continue-on-error: true
+
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan -input=false
