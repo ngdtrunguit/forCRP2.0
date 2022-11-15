@@ -18,10 +18,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
     os_disk_size_gb = 50
   }
 
-  service_principal {
-    client_id     = var.client_id
-    client_secret = var.client_secret
-  }
+  # service_principal {
+  #   client_id     = var.client_id
+  #   client_secret = var.client_secret
+  # }
 
   role_based_access_control_enabled = true
 
