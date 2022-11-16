@@ -96,12 +96,18 @@ jobs:
       uses: Azure/setup-kubectl@v3
       id: installkubectl
 
-    - name: Kubectl argo rollouts
+    - name: install argo rollouts
       run: |
         curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-darwin-amd64
         chmod +x ./kubectl-argo-rollouts-darwin-amd64
         sudo mv ./kubectl-argo-rollouts-darwin-amd64 /usr/local/bin/kubectl-argo-rollouts
       id: installargorollout
+
+    - name: install argocd cli
+      run: |
+        curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+        sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+        rm argocd-linux-amd64
 
     - name: Login to Azure
       uses: azure/login@v1
@@ -141,3 +147,7 @@ jobs:
       #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
       run: terraform apply -auto-approve out.plan
       working-directory: TF-helm
+
+    - name: install blue green app
+      run: |
+        argocd app create --name blue-green --repo https://github.com/argoproj/argocd-example-apps --dest-server https://kubernetes.default.svc --dest-namespace default --path blue-green && argocd app sync blue-green
