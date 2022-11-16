@@ -85,17 +85,12 @@ jobs:
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    - name: install helm
-      uses: azure/setup-helm@v3
-      with:
-        version: 'v3.4' # default is latest (stable)
-        #token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
+    - name: Helm tool installer
+      uses: Azure/setup-helm@v3
       id: installhelm
 
-    - name: intall kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: 'v3.0' # default is latest stable
+    - name: Kubectl tool installer
+      uses: Azure/setup-kubectl@v3
       id: installkubectl
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
