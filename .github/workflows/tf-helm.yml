@@ -88,12 +88,10 @@ jobs:
     - name: Helm tool installer
       uses: Azure/setup-helm@v3
       id: installhelm
-      working-directory: TF-helm
 
     - name: Kubectl tool installer
       uses: Azure/setup-kubectl@v3
       id: installkubectl
-      working-directory: TF-helm
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
