@@ -130,14 +130,15 @@ resource "helm_release" "istio-ingressgateway" {
 }
 
 resource "null_resource" "argo-rollout" {
-  triggers = {
-    always_run = "${timestamp()}"
-  }
+  # triggers = {
+  #   always_run = "${timestamp()}"
+  # }
   provisioner "local-exec" {
-    command = "kubectl apply -n ${kubernetes_namespace.argo-rollouts.metadata.0.name} -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml"
-    # environment = {
-    #   kubeconfig = ".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}"
-    # }
+    command = file("./argo-rollouts.sh")
+    environment = {
+      namespace = "${kubernetes_namespace.argo-rollouts.metadata.0.name}"
+      # kubeconfig = ".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}"
+    }
   }
   depends_on = [kubernetes_namespace.argo-rollouts]
 }

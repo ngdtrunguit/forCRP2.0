@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: blue-green
+spec:
+  destination:
+    name: 'blue-green'
+    namespace: application
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: blue-green
+    repoURL: 'https://github.com/argoproj/argocd-example-apps'
+    targetRevision: HEAD
+  project: default
