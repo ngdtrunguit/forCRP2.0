@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+# set -euo pipefail
 
 kubectl apply -n ${namespace} -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
