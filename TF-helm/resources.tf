@@ -135,14 +135,14 @@ resource "null_resource" "argo-rollout" {
   }
   provisioner "local-exec" {
     command = "kubectl apply -n ${kubernetes_namespace.argo-rollouts.metadata.0.name} -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml"
-    # --kubeconfig \".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}\""
+    kubeconfig = ".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}"
   }
   depends_on = [kubernetes_namespace.argo-rollouts]
 }
 
 resource "null_resource" "argocd" {
   provisioner "local-exec" {
-    command = file("./argocd.sh")
+    command = file("TF-helm/argocd.sh")
     environment = {
       namespace  = "${kubernetes_namespace.argocd.metadata.0.name}"
       kubeconfig = ".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}"
