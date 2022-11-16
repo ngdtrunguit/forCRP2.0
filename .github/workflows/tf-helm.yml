@@ -90,13 +90,13 @@ jobs:
       with:
         version: 'v3.4' # default is latest (stable)
         #token: ${{ secrets.GITHUB_TOKEN }} # only needed if version is 'latest'
-      id: install
+      id: installhelm
 
     - name: intall kubectl
       uses: azure/setup-kubectl@v3
       with:
         version: 'v3.0' # default is latest stable
-      id: install
+      id: installkubectl
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
