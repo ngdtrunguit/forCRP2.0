@@ -94,9 +94,12 @@ jobs:
       id: installkubectl
 
     - name: Kubectl argo rollouts
-      uses: StarUbiquitous/kubectl-argo-rollouts@v1.0.2
+      run: |
+        curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-darwin-amd64
+        chmod +x ./kubectl-argo-rollouts-darwin-amd64
+        sudo mv ./kubectl-argo-rollouts-darwin-amd64 /usr/local/bin/kubectl-argo-rollouts
       id: installargorollout
-      
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
