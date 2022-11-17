@@ -127,7 +127,7 @@ resource "null_resource" "argo-rollout" {
       namespace = "${kubernetes_namespace.argo-rollouts.metadata.0.name}"
     }
   }
-  depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.argocd, kubernetes_namespace.argo-rollouts]
+  depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.argocd, kubernetes_namespace.argo-rollouts, null_resource.argocd]
 }
 
 resource "null_resource" "argocd" {
