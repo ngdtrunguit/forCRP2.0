@@ -9,21 +9,35 @@ on:
 
 env:
   IMAGE_NAME: test-ci
+  version: "1.0"
   registry: ${{ secrets.ACR_ENDPOINT }}
   username: ${{ secrets.ACR_USERNAME }}
   password: ${{ secrets.ACR_PASSWORD }}
 
-defaults:
-  run:
-    working-directory: test-ci
+
 jobs:
 
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: test-ci
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    - name: Build the Docker image
+      run: docker build . -t ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+    - name: Log into registry
+      uses: azure/docker-login@v1
+      with:
+        registry: ${{ secrets.ACR_ENDPOINT }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+      run: docker push ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ env.version }}
     # - name: Checkout submodules
     #   run: git submodule update --init --recursive
 
@@ -36,12 +50,7 @@ jobs:
     #     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     #   id: tag
 
-    # - name: Log into registry
-    #   uses: docker/login-action@v1
-    #   with:
-    #     registry: ${{ secrets.ACR_ENDPOINT }}
-    #     username: ${{ secrets.ACR_USERNAME }}
-    #     password: ${{ secrets.ACR_PASSWORD }}
+
 
     # - name: Build & Push
     #   uses: docker/build-push-action@v2
@@ -51,14 +60,3 @@ jobs:
     #     build-args: |
     #       version=${{ steps.tag.outputs.version }}
     #     tags: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.version }}
-
-    - name: Build the Docker image
-      run: docker build . -t ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-
-    - name: Build and push image
-      uses: azure/login-action@v1
-      with:
-        registry: ${{ secrets.ACR_ENDPOINT }}
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
-      run: docker push ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
