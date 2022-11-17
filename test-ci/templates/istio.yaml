@@ -7,7 +7,7 @@ spec:
     istio: ingressgateway # use istio default controller
   servers:
   - port:
-      number: 80
+      number: 8099
       name: http
       protocol: HTTP
     hosts:
@@ -30,4 +30,4 @@ spec:
     - destination:
         host: productpage
         port:
-          number: 80
+          number: 8099
