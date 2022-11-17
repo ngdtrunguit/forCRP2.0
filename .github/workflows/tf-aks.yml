@@ -69,8 +69,6 @@ jobs:
       #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
       run: terraform apply -auto-approve out.plan
       working-directory: TF-aks
-    - name: Get acr pwd
-      run: terraform output acr_pwd
 
 
     # - name: Terraform Destroy
