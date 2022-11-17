@@ -9,7 +9,7 @@ on:
 
 env:
   IMAGE_NAME: test-ci
-  version: "1.0"
+  IMAGE_TAG: 1.0.${{ github.run_number }} # GITHUB_RUN_NUMBER }}
   registry: ${{ secrets.ACR_ENDPOINT }}
   username: ${{ secrets.ACR_USERNAME }}
   password: ${{ secrets.ACR_PASSWORD }}
@@ -28,14 +28,28 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Build the Docker image
-      run: |
-        docker build . -t ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ env.version }}
+    # - name: Build the Docker image
+    #   run: |
+    #     docker build . -t ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ env.version }}
+    # - name: Log into registry
+    #   uses: azure/docker-login@v1
+    #   with:
+    #     registry: ${{ secrets.ACR_ENDPOINT }}
+    #     username: ${{ secrets.ACR_USERNAME }}
+    #     password: ${{ secrets.ACR_PASSWORD }}
+
+    # - run: docker push ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ env.version }}
+
     - name: Log into registry
-      uses: azure/docker-login@v1
+      uses: docker/login-action@v1
       with:
         registry: ${{ secrets.ACR_ENDPOINT }}
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
-
-    - run: docker push ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ env.version }}
+    - name: Build & Push
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        build-args: |
+          version=${{ env.IMAGE_TAG }}
+        tags: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
