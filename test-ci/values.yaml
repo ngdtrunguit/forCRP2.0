@@ -9,8 +9,4 @@ image:
 
 service:
   port: 80
-  type: NodePort
-  primary:
-    nodePort: 30035
-  preview:
-    nodePort: 30036
+  type: ClusterIP
