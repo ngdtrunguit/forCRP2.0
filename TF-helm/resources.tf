@@ -140,7 +140,7 @@ resource "null_resource" "argo-rollout" {
       # kubeconfig = ".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}"
     }
   }
-  depends_on = [kubernetes_namespace.argo-rollouts]
+  depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.argocd, kubernetes_namespace.argo-rollouts]
 }
 
 resource "null_resource" "argocd" {
@@ -159,5 +159,5 @@ data "external" "argocd_pwd" {
   # query = {
   #   "kubeconfig" = ".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}"
   # }
-  depends_on = [null_resource.argocd]
+  depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.argocd, null_resource.argocd]
 }
