@@ -22,16 +22,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    - name: Checkout submodules
-      run: git submodule update --init --recursive
+    # - name: Checkout repository
+    #   uses: actions/checkout@v3
+    # - name: Checkout submodules
+    #   run: git submodule update --init --recursive
 
     # - name: Get tag
     #   id: tag
     #   uses: dawidd6/action-get-tag@v1
-    - name: Auto tag
-      uses: Klemensas/action-autotag@1.2.3
+    - uses: actions/checkout@v2
+    - uses: Klemensas/action-autotag@stable
       id: tag
 
     - name: Log into registry
