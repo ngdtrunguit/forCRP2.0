@@ -38,25 +38,3 @@ jobs:
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
       run: docker push ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ env.version }}
-    # - name: Checkout submodules
-    #   run: git submodule update --init --recursive
-
-    # - name: Get tag
-    #   id: tag
-    #   uses: dawidd6/action-get-tag@v1
-    # - uses: actions/checkout@v2
-    # - uses: Klemensas/action-autotag@stable
-    #   with:
-    #     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-    #   id: tag
-
-
-
-    # - name: Build & Push
-    #   uses: docker/build-push-action@v2
-    #   with:
-    #     working-directory: test-ci
-    #     push: true
-    #     build-args: |
-    #       version=${{ steps.tag.outputs.version }}
-    #     tags: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.version }}
