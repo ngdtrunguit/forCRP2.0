@@ -6,10 +6,10 @@ spec:
   gateways:
     - argocd-gateway
   hosts:
-    - "*"
+    - argocd.trung.com
   http:
     - route:
       - destination:
-          host: argocd-server
+          host: argocd-server.argocd.svc.cluster.local
           port:
             number: 80
