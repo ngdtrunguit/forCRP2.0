@@ -21,13 +21,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-      working-directory: test-ci
 
     - name: Get tag
       id: tag
       uses: dawidd6/action-get-tag@v1
-      working-directory: test-ci
-
+    
     - name: Log into registry
       uses: docker/login-action@v1
       with:
