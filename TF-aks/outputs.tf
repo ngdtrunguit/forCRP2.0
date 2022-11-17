@@ -57,6 +57,6 @@ output "acr_usr" {
 
 output "acr_pwd" {
   description = "The Password associated with the Container Registry Admin account - if the admin account is enabled."
-  sensitive = true
-  value = azurerm_container_registry.acr.admin_password
+  #sensitive = true
+  value = nonsensitive(azurerm_container_registry.acr.admin_password)
 }
