@@ -1,19 +1,23 @@
-# forCRP2-AKS
- ---------CRP2 AKS (IaC, CICD, Service Mesh)------------
+#forCRP2-AKS
+## ---------CRP2 AKS (IaC, CICD, Service Mesh)------------ ##
 
-All the infrastructure and applications setup by github action with terraform
+### All the infrastructure and applications setup by github action with terraform
 
-Cloud provider: Azure
-IaC tool: Terraform
-Pipeline: Github Action, ArgoCD, Argo Rollouts
-Source code: Github
-Container images: Azure Container Registry 
+- Cloud provider: Azure
+- IaC tool: Terraform
+- Pipeline: Github Action, ArgoCD, Argo Rollouts
+- Source code: Github
+- Container images: Azure Container Registry 
 
 ## Step 1: Setup remote state for Terraform
 Using terraform to create remote state backend on Azure Storage. Two main containers for aks and application
-tf-init-state folder
-- tfstate for aks
-- Tfstate for helm
+
+[TF-init-state] (https://github.com/ngdtrunguit/forCRP2.0/blob/main/tf-init-state)
+
+```sh
+- tfstate for aks tfstate-aks
+- Tfstate for helm tfstate-aks
+``` 
 
 ## Step 2: Create AKS and ACR by terraform
 
@@ -43,16 +47,3 @@ Update tag number for image on Values.yaml
 => argocd will automate sync and argo rollout help to scale up replicaset for preview services.
 
 Manually promote new build on ArgoCD when testing activity done. 
-
-
-
-
-
-
-
-
-
-
-
-
- 
