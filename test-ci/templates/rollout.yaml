@@ -32,3 +32,10 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
+  strategy:
+    blueGreen: 
+      activeService: rollout-bluegreen-active
+      previewService: rollout-bluegreen-preview
+      # Rollouts can be resumed using: `kubectl argo rollouts promote ROLLOUT`
+      autoPromotionEnabled: false
+      scaleDownDelaySeconds: 60
