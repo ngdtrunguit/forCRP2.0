@@ -23,10 +23,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
   identity {
     type = "SystemAssigned"
   }
-  # network_profile {
-  #   network_plugin = "kubenet"
-  #   network_policy = "calico"
-  # }
 
   role_based_access_control_enabled = true
 
@@ -44,18 +40,3 @@ resource "azurerm_container_registry" "acr" {
   sku  = "Standard"
   tags = var.tags
 }
-
-# data "azurerm_client_config" "current" {
-# }
-
-# data "azurerm_user_assigned_identity" "identity" {
-#   name                = "${azurerm_kubernetes_cluster.aks.name}-agentpool"
-#   resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
-# }
-
-# resource "azurerm_role_assignment" "role_acrpull" {
-#   scope                            = azurerm_container_registry.acr.id
-#   role_definition_name             = "AcrPull"
-#   principal_id                     = data.azurerm_user_assigned_identity.identity.principal_id
-#   skip_service_principal_aad_check = true
-# }

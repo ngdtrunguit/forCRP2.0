@@ -7,8 +7,6 @@ on:
   #manual trigger
   workflow_dispatch:
 
-# permissions:
-#   contents: read
 env: 
   ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
@@ -30,14 +28,15 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
-
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    
+    # Replace variables 
     - name: Replace Variables in terraform.tfvars
       uses: datamonsters/replace-action@v2
       with:
         files: TF-aks/terraform.tfvars
         replacements: __subscriptionid__=${{ env.ARM_SUBSCRIPTION_ID }},__tenant_id__=${{ env.ARM_TENANT_ID }},__client_id__=${{ env.ARM_CLIENT_ID }}',__client_secret__=${{ env.ARM_CLIENT_SECRET }}'
-
+    
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
@@ -70,8 +69,7 @@ jobs:
       run: terraform apply -auto-approve out.plan
       working-directory: TF-aks
 
-
-    # - name: Terraform Destroy
-    #   #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-    #   run: terraform destroy -auto-approve
-    #   working-directory: TF-aks
+    - name: Terraform Destroy
+      #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+      run: terraform destroy -auto-approve
+      working-directory: TF-aks

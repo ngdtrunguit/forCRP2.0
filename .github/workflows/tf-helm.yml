@@ -6,8 +6,6 @@ on:
   pull_request:
   workflow_dispatch:
 
-# permissions:
-#   contents: read
 env: 
   ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
   ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
@@ -33,18 +31,19 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    # Replace variables 
     - name: Replace Variables in terraform.tfvars
       uses: datamonsters/replace-action@v2
       with:
         files: TF-helm/terraform.tfvars
         replacements: __subscriptionid__=${{ env.ARM_SUBSCRIPTION_ID }},__tenant_id__=${{ env.ARM_TENANT_ID }},__client_id__=${{ env.ARM_CLIENT_ID }}',__client_secret__=${{ env.ARM_CLIENT_SECRET }}'
-
+    
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
+    # Install helm, kubectl, argocd, argo rollouts
     - name: Helm tool installer
       uses: Azure/setup-helm@v3
       id: installhelm
@@ -66,6 +65,7 @@ jobs:
         sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
         rm argocd-linux-amd64
 
+    # Login to Azure
     - name: Login to Azure
       uses: azure/login@v1
       with:
@@ -105,7 +105,7 @@ jobs:
       run: terraform apply -auto-approve out.plan
       working-directory: TF-helm
 
-    # - name: Terraform Destroy
-    #   #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-    #   run: terraform destroy -auto-approve
-    #   working-directory: TF-helm
+    - name: Terraform Destroy
+      #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+      run: terraform destroy -auto-approve
+      working-directory: TF-helm

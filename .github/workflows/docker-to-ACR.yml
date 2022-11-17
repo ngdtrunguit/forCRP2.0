@@ -19,21 +19,22 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-
+# Set directory for CI subfolder
     defaults:
       run:
         working-directory: test-ci
-
+# Checkout 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-
+# Login to ACR
     - name: Log into registry
       uses: docker/login-action@v1
       with:
         registry: ${{ secrets.ACR_ENDPOINT }}
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
+#Build and Push Docker Image to ACR
     - name: Build the Docker image
       run: |
         docker build -t ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
