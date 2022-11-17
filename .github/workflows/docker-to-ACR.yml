@@ -13,6 +13,9 @@ env:
   username: ${{ secrets.ACR_USERNAME }}
   password: ${{ secrets.ACR_PASSWORD }}
   
+defaults:
+  run:
+    working-directory: test-ci
 jobs:
 
   build:
@@ -32,7 +35,6 @@ jobs:
         registry: ${{ secrets.ACR_ENDPOINT }}
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
-      working-directory: test-ci
 
     # - name: Build the Docker image
     #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
@@ -44,4 +46,3 @@ jobs:
         build-args: |
           version=${{ steps.tag.outputs.tag }}
         tags: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}
-      working-directory: test-ci
