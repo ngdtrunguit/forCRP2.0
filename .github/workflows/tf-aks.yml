@@ -70,7 +70,7 @@ jobs:
       run: terraform apply -auto-approve out.plan
       working-directory: TF-aks
     - name: Get acr pwd
-      run: terraform output -raw acr_pwd
+      run: terraform output acr_pwd
 
 
     # - name: Terraform Destroy
