@@ -12,7 +12,7 @@ env:
   registry: ${{ secrets.ACR_ENDPOINT }}
   username: ${{ secrets.ACR_USERNAME }}
   password: ${{ secrets.ACR_PASSWORD }}
-  
+
 defaults:
   run:
     working-directory: test-ci
@@ -24,6 +24,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
 
     - name: Get tag
       id: tag
@@ -42,6 +44,7 @@ jobs:
     - name: Build & Push
       uses: docker/build-push-action@v2
       with:
+        file: test-ci/Dockerfile
         push: true
         build-args: |
           version=${{ steps.tag.outputs.tag }}
