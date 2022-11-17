@@ -11,6 +11,4 @@ kubectl patch deployment \
   -p='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["argocd-server","--insecure"]}]'
 
 #Install gateway and virtualservice
-kubectl apply -n ${namespace} -f ./argocd-gateway.yaml
-
 kubectl apply -n ${namespace} -f ./argocd-virtualservice.yaml
