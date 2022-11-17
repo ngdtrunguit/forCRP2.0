@@ -50,13 +50,13 @@ output "login_server" {
   value       = azurerm_container_registry.acr.login_server
 }
 
-output "admin_username" {
+output "acr_usr" {
   description = "The Username associated with the Container Registry Admin account - if the admin account is enabled"
   value       = azurerm_container_registry.acr.admin_username
 }
 
-output "admin_password" {
+output "acr_pwd" {
   description = "The Password associated with the Container Registry Admin account - if the admin account is enabled."
-  #sensitive = true
+  sensitive = true
   value = azurerm_container_registry.acr.admin_password
 }
