@@ -14,7 +14,7 @@ spec:
       port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
-      NodePort: {{ .Values.service.primary.NodePort }}
+      nodePort: {{ .Values.service.primary.nodePort }}
   selector:
     app: test-ci
     release: release-name
@@ -35,7 +35,7 @@ spec:
       port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
-      NodePort: {{ .Values.service.preview.NodePort }}
+      nodePort: {{ .Values.service.preview.nodePort }}
   selector:
     app: test-ci
     release: release-name

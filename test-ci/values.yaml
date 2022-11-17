@@ -8,6 +8,6 @@ image:
 service:
   port: 80
   primary:
-    NodePort: 30035
+    nodePort: 30035
   preview:
-    NodePort: 30036
+    nodePort: 30036
