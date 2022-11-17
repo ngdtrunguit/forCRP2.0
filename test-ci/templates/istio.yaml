@@ -17,7 +17,7 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: test-ci
+  name: test-ci-blue
 spec:
   gateways:
     - test-ci-gateway
@@ -35,7 +35,7 @@ spec:
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: test-ci
+  name: test-ci-green
 spec:
   gateways:
     - test-ci-gateway
