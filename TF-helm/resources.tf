@@ -10,15 +10,6 @@ resource "local_file" "kube_config" {
   content  = data.azurerm_kubernetes_cluster.aks_cluster.kube_admin_config_raw
   filename = ".kube/config"
 }
-# resource "null_resource" "set-kube-config" {
-#   triggers = {
-#     always_run = "${timestamp()}"
-#   }
-#   provisioner "local-exec" {
-#     command = "az aks get-credentials -n ${data.azurerm_kubernetes_cluster.aks_cluster.name} -g ${data.azurerm_resource_group.aks_rg.name} --file \".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}\" --admin --overwrite-existing"
-#   }
-#   depends_on = [local_file.kube_config]
-# }
 
 provider "helm" {
   kubernetes {
@@ -117,7 +108,7 @@ resource "helm_release" "istiod" {
   cleanup_on_fail = true
   repository      = "https://istio-release.storage.googleapis.com/charts"
   chart           = "istiod"
-  depends_on      = [helm_release.istio-base]
+  depends_on      = [kubernetes_namespace.istio_system, helm_release.istio-base]
 }
 
 resource "helm_release" "istio-ingressgateway" {
@@ -126,18 +117,14 @@ resource "helm_release" "istio-ingressgateway" {
   cleanup_on_fail = true
   repository      = "https://istio-release.storage.googleapis.com/charts"
   chart           = "gateway"
-  depends_on      = [helm_release.istio-base, helm_release.istiod]
+  depends_on      = [kubernetes_namespace.istio-ingress, helm_release.istio-base, helm_release.istiod]
 }
 
 resource "null_resource" "argo-rollout" {
-  # triggers = {
-  #   always_run = "${timestamp()}"
-  # }
   provisioner "local-exec" {
     command = file("./argo-rollouts.sh")
     environment = {
       namespace = "${kubernetes_namespace.argo-rollouts.metadata.0.name}"
-      # kubeconfig = ".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}"
     }
   }
   depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.argocd, kubernetes_namespace.argo-rollouts]
@@ -148,16 +135,12 @@ resource "null_resource" "argocd" {
     command = file("./argocd.sh")
     environment = {
       namespace = "${kubernetes_namespace.argocd.metadata.0.name}"
-      # kubeconfig = ".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}"
     }
   }
   depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.argocd]
 }
 
 data "external" "argocd_pwd" {
-  program = ["bash", "./argocd-get-pwd.sh"]
-  # query = {
-  #   "kubeconfig" = ".kube/${data.azurerm_kubernetes_cluster.aks_cluster.name}"
-  # }
+  program    = ["bash", "./argocd-get-pwd.sh"]
   depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.argocd, null_resource.argocd]
 }
