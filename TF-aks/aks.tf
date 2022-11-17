@@ -5,11 +5,12 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                = var.cluster_name
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  dns_prefix          = var.dns_prefix
-  kubernetes_version  = var.kube_version
+  name                  = var.cluster_name
+  location              = azurerm_resource_group.rg.location
+  resource_group_name   = azurerm_resource_group.rg.name
+  dns_prefix            = var.dns_prefix
+  kubernetes_version    = var.kube_version
+  enable_node_public_ip = true
 
   default_node_pool {
     name            = "default"
