@@ -34,8 +34,8 @@ spec:
               protocol: TCP
   strategy:
     blueGreen: 
-      activeService: rollout-bluegreen-active
-      previewService: rollout-bluegreen-preview
+      activeService: release-name-test-ci
+      previewService: release-name-test-ci-preview
       # Rollouts can be resumed using: `kubectl argo rollouts promote ROLLOUT`
       autoPromotionEnabled: false
       scaleDownDelaySeconds: 60
