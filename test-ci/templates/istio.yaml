@@ -29,3 +29,21 @@ spec:
           host: release-name-test-ci.application.svc.cluster.local
           port:
             number: 80
+
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: test-ci
+spec:
+  gateways:
+    - test-ci-gateway
+  hosts:
+    - green.app.com
+  http:
+    - route:
+      - destination:
+          host: release-name-test-ci-preview.application.svc.cluster.local
+          port:
+            number: 80
