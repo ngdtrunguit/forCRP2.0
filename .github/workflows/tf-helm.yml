@@ -105,11 +105,7 @@ jobs:
       run: terraform apply -auto-approve out.plan
       working-directory: TF-helm
 
-    # - name: install blue green app
-    #   run: |
-    #     argocd app create --name blue-green --repo https://github.com/argoproj/argocd-example-apps --dest-server https://kubernetes.default.svc --dest-namespace default --path blue-green && argocd app sync blue-green
-   
-    # - name: Terraform Destroy
-    #   #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-    #   run: terraform destroy -auto-approve
-    #   working-directory: TF-helm
+    - name: Terraform Destroy
+      #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+      run: terraform destroy -auto-approve
+      working-directory: TF-helm
