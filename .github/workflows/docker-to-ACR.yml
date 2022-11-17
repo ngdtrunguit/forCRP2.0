@@ -56,12 +56,12 @@ jobs:
     #     tags: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.version }}
 
 
-      - name: 'Build and push image'
-        uses: azure/docker-login@v1
-        with:
-          registry: ${{ secrets.ACR_ENDPOINT }}
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
-      - run: |
-          docker build . -t ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          docker push ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+    - name: 'Build and push image'
+      uses: azure/docker-login@v1
+      with:
+        registry: ${{ secrets.ACR_ENDPOINT }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+    - run: |
+        docker build . -t ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        docker push ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
