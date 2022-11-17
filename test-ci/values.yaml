@@ -6,5 +6,8 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP
-  port: 8099
+  port: 80
+  primary:
+    NodePort: 30035
+  preview:
+    NodePort: 30036

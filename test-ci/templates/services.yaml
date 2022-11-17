@@ -10,10 +10,11 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - name: http
+      port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
-      name: http
+      NodePort: {{ .Values.service.primary.NodePort }}
   selector:
     app: test-ci
     release: release-name
@@ -28,12 +29,13 @@ metadata:
     release: release-name
     heritage: Helm
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - name: http
+      port: {{ .Values.service.port }}
       targetPort: http
       protocol: TCP
-      name: http
+      NodePort: {{ .Values.service.preview.NodePort }}
   selector:
     app: test-ci
     release: release-name
