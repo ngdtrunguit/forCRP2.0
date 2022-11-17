@@ -22,36 +22,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # - name: Checkout repository
-    #   uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
     # - name: Checkout submodules
     #   run: git submodule update --init --recursive
 
     # - name: Get tag
     #   id: tag
     #   uses: dawidd6/action-get-tag@v1
-    - uses: actions/checkout@v2
-    - uses: Klemensas/action-autotag@stable
-      with:
-        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        version: "${{ steps.previous_step.outputs.version }}"
-      id: tag
+    # - uses: actions/checkout@v2
+    # - uses: Klemensas/action-autotag@stable
+    #   with:
+    #     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    #   id: tag
 
-    - name: Log into registry
-      uses: docker/login-action@v1
-      with:
-        registry: ${{ secrets.ACR_ENDPOINT }}
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
+    # - name: Log into registry
+    #   uses: docker/login-action@v1
+    #   with:
+    #     registry: ${{ secrets.ACR_ENDPOINT }}
+    #     username: ${{ secrets.ACR_USERNAME }}
+    #     password: ${{ secrets.ACR_PASSWORD }}
 
-    # - name: Build the Docker image
-    #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    # # - name: Build the Docker image
+    # #   run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
-    - name: Build & Push
-      uses: docker/build-push-action@v2
-      with:
-        file: test-ci/Dockerfile
-        push: true
-        build-args: |
-          version=${{ steps.tag.outputs.version }}
-        tags: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.version }}
+    # - name: Build & Push
+    #   uses: docker/build-push-action@v2
+    #   with:
+    #     working-directory: test-ci
+    #     push: true
+    #     build-args: |
+    #       version=${{ steps.tag.outputs.version }}
+    #     tags: ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.version }}
+
+
+      - name: 'Build and push image'
+        uses: azure/docker-login@v1
+        with:
+          registry: ${{ secrets.ACR_ENDPOINT }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - run: |
+          docker build . -t ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push ${{ secrets.ACR_ENDPOINT }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
