@@ -1,7 +1,8 @@
-# **forCRP2.0 AKS**
+# **forCRP2.0  AKS**
+
 ## ---------CRP2 AKS (IaC, CICD, Service Mesh)------------ ##
 
-### All the infrastructure and applications setup by github action with terraform
+### _All the infrastructure and applications setup by github action with terraform_
 
 - Cloud provider: Azure
 - IaC tool: Terraform
@@ -9,41 +10,86 @@
 - Source code: Github
 - Container images: Azure Container Registry 
 
+
+> Note: github action will be trigger by manually by workflow_dispatch or auto trigger by push/pull_requests
+> ```sh 
+> on:
+>  push:
+>    branches: [ "main" ]
+>  pull_request:
+>    branches: [ "main" ]
+>  workflow_dispatch:
+> ```
+
+
 ## Step 1: Setup remote state for Terraform
 Using terraform to create remote state backend on Azure Storage. Two main containers for aks and application
 
-[TF-init-state] (https://github.com/ngdtrunguit/forCRP2.0/blob/main/tf-init-state)
+[Github-action.tf-backend](https://github.com/ngdtrunguit/forCRP2.0/blob/main/.github/workflows/tf-backend.yml)
+
+[TF-init-state](https://github.com/ngdtrunguit/forCRP2.0/blob/main/tf-init-state)
 
 ```sh
 - tfstate for aks tfstate-aks
-- Tfstate for helm tfstate-aks
+- tfstate for helm tfstate-helm
 ``` 
 
-## Step 2: Create AKS and ACR by terraform
+## Step 2: Create Azure Kubernetes Service and Azure Container Registry by Terraform
 
-az account set --subscription az aks get-credentials --resource-group --name kubectl get ns
+[Github-action.tf-aks](https://github.com/ngdtrunguit/forCRP2.0/blob/main/.github/workflows/tf-aks.yml)
+
+Create a service principal and the information to github secret
+```sh 
+az ad sp create-for-rbac --name <name> --role Contributor --scopes /subscriptions/<subscription-id> --sdk-auth
+
+{
+  "clientId": "",
+  "clientSecret": "",
+  "subscriptionId": "",
+  "tenantId": "",
+}
+```
+> After AKS provisioned, use these cli to access kubernetes cluster:
+>  ```sh
+> az aks get-credentials --resource-group <resouregroup_name> --name <kubernetes_cluster_name>
+> kubectl get ns # to check if it work
+
 
 
 ## Step 3: Install istio service mesh and argocd, argo rollout using Terraform helm/kubernetes provider
  
+[Github-action.tf-helm](https://github.com/ngdtrunguit/forCRP2.0/blob/main/.github/workflows/tf-helm.yml)
 
-Install istio service mesh on AKS
-create istio-system/istio-ingress namespace 
-
-create argocd namspace with label istio-injection = "enabled"
-install istio/argocd by tf-helm
-install argo rollout by tf-helm (for Green/Blue deployment)
-Modify script sh to install app-blue-green
-
-
+> This step will use helm and kubernetes providers
+> ```sh
+> resource "kubernetes_namespace" "application" {
+> }
+> resource "helm_release" "istiod" {
+> }
+> resource "null_resource" "argocd" {
+> }
+> ```
+> combine with _sh_ to install:
+1. Istio service mesh 
+2. ArgoCD with virtualservice
+3. Argo Rollouts
+4. Create/manage Blue-Green app in application namespace using ArgoCD
+   > Note that I are using loadbalancer for blue-green app. At the time of creation, I do not use dns for istio virtualservice. So, I manually add these record to /etc/hosts for testing activity 
+   ``` sh
+   <loadbalancer_ip>    blue.app.com
+   <loadbalancer_ip>    green.app.com
+   ```
 
 
 ## Step 4: Setup CI/CD pipeline to handle the blue/green deployment strategy for application
 
-Using github action to build docker CI and push to ACR
+[Github-action.docker-to-ACR](https://github.com/ngdtrunguit/forCRP2.0/blob/main/.github/workflows/docker-to-ACR.yml)
 
-Update tag number for image on Values.yaml 
+> ### _Using Github action to build docker CI and push to ACR_
 
-=> argocd will automate sync and argo rollout help to scale up replicaset for preview services.
+- Image will be automatically build by push and pull_requests or trigger manually on main branch. Tag number will be github runner build
 
-Manually promote new build on ArgoCD when testing activity done. 
+- There are still two step manual:
+     1.  Update tag number for image on Values.yaml manually 
+     2.  Manually promote new build on ArgoCD when testing activity done. 
+>  ArgoCD will automate sync and argo rollout will take care for Blue-Green deployment (CD)
