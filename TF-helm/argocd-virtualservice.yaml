@@ -6,7 +6,7 @@ spec:
   gateways:
     - argocd-gateway
   hosts:
-    - argocd.trung.com
+    - "*"
   http:
     - route:
       - destination:
