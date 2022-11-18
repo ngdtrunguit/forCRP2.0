@@ -9,4 +9,4 @@ hostname=$(kubectl get service istio-ingressgateway -n istio-ingress --output=js
 argocd login --username admin --password ${argocd_pwd} --grpc-web --insecure --plaintext ${hostname}:80
 
 #Install blue-green app using test-ci
-argocd app create --name app-blue-green --repo https://github.com/ngdtrunguit/kiralab.git --dest-server https://kubernetes.default.svc --dest-namespace application --path test-ci && argocd app sync app-blue-green
+argocd app create --name app-blue-green --repo https://github.com/ngdtrunguit/forCRP2.0.git --dest-server https://kubernetes.default.svc --dest-namespace application --path test-ci && argocd app sync app-blue-green
