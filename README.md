@@ -2,7 +2,7 @@
 
 ## ---------CRP2 AKS (IaC, CICD, Service Mesh)------------ ##
 
-### _All the infrastructure and applications setup by github action with terraform_
+### _All the infrastructure and applications setup by Github Action with Terraform_
 
 - Cloud provider: Azure
 - IaC tool: Terraform
