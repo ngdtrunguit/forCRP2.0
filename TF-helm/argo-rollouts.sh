@@ -4,7 +4,7 @@
 kubectl apply -n ${namespace} -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
 
 while
-[ $(kubectl -n argocd get pod -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]; do
+[[ $(kubectl -n argocd get pod -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do
  sleep 1
 done
 
