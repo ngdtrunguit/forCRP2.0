@@ -120,7 +120,7 @@ resource "helm_release" "istio-ingressgateway" {
   depends_on      = [kubernetes_namespace.istio-ingress, helm_release.istio-base, helm_release.istiod]
 }
 
-resource "null_resource" "argo-rollout" {
+resource "null_resource" "argo-rollouts" {
   provisioner "local-exec" {
     command = file("./argo-rollouts.sh")
     environment = {
@@ -142,5 +142,5 @@ resource "null_resource" "argocd" {
 
 data "external" "argocd_pwd" {
   program    = ["bash", "./argocd-get-pwd.sh"]
-  depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.argocd, null_resource.argocd]
+  depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.argocd, null_resource.argocd, null_resource.argo-rollouts]
 }

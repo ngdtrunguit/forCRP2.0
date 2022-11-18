@@ -3,9 +3,7 @@
 #install Argo Rollout
 kubectl apply -n ${namespace} -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
 
-# while [[ $(kubectl -n argocd get pod -l app.kubernetes.io/name=argocd-server -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; 
-# do echo "wating for argocd" && sleep 1;  done
-
+#wait until argocd server ready
 kubectl -n argocd wait pods -l app.kubernetes.io/name=argocd-server --for condition=Ready --timeout=60s
 
 
