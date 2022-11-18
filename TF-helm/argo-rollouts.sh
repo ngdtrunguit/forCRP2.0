@@ -3,10 +3,8 @@
 #install Argo Rollout
 kubectl apply -n ${namespace} -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
 
-while
-[[ $(kubectl -n argocd get pod -l app.kubernetes.io/name=argocd-server -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do
- sleep 1
-done
+while [[ $(kubectl -n argocd get pod -l app.kubernetes.io/name=argocd-server -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; 
+do echo "wating for argocd" && sleep 1;  done
 
 #Get credential to argocd
 argocd_pwd=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
