@@ -105,7 +105,7 @@ jobs:
       run: terraform apply -auto-approve out.plan
       working-directory: TF-helm
 
-   # - name: Terraform Destroy
-   #   #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-   #   run: terraform destroy -auto-approve
-   #   working-directory: TF-helm
+   -  name: Terraform Destroy
+      #if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
+      run: terraform destroy -auto-approve
+      working-directory: TF-helm
