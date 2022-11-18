@@ -88,8 +88,9 @@ az ad sp create-for-rbac --name <name> --role Contributor --scopes /subscription
 > ### _Using Github action to build docker **CI** and push to ACR_
 
 - Image will be automatically build by push and pull_requests or trigger manually on main branch. Tag number will be github runner build
+- Update tag number for image on Values.yaml automatically 
 
-- There are still two step manual:
-     1.  Update tag number for image on Values.yaml manually 
-     2.  Manually promote new build on ArgoCD when testing activity done. 
+- There is still one step should be done manually:
+   - Promote new build on ArgoCD when testing activity done. 
+  
 >  ArgoCD will automate sync and argo rollout will take care for Blue-Green deployment **(CD)**
