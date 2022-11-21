@@ -3,7 +3,7 @@ name: 'TF-AKS'
 on:
   # push:
   #   branches: [ "main" ]
-  pull_request:
+  # pull_request:
   #manual trigger
   workflow_dispatch:
 
