@@ -3,7 +3,11 @@ name: 'TF-AKS'
 on:
   # push:
   #   branches: [ "main" ]
-  # pull_request:
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - "TF-aks/**"
+      - "!**/README.md"
   #manual trigger
   workflow_dispatch:
 

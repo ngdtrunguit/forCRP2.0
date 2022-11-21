@@ -3,7 +3,11 @@ name: 'TF-helm-app'
 on:
   # push:
   #   branches: [ "main" ]
-  # pull_request:
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - "TF-helm/**"
+      - "!**/README.md"
   workflow_dispatch:
 
 env: 
