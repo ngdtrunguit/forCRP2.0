@@ -94,3 +94,4 @@ az ad sp create-for-rbac --name <name> --role Contributor --scopes /subscription
    - Promote new build on ArgoCD when testing activity done. 
   
 >  ArgoCD will automate sync and argo rollout will take care for Blue-Green deployment **(CD)**
+
