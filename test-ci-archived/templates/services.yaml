@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-test-ci
+  labels:
+    app: test-ci
+    chart: test-ci-0.1.0
+    release: release-name
+    heritage: Helm
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+  selector:
+    app: test-ci
+    release: release-name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-test-ci-preview
+  labels:
+    app: test-ci
+    chart: test-ci-0.1.0
+    release: release-name
+    heritage: Helm
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+  selector:
+    app: test-ci
+    release: release-name

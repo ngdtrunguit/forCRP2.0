@@ -1,0 +1,49 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: test-ci-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - hosts:
+        - "*"
+      port:
+        name: http
+        number: 80
+        protocol: HTTP
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: test-ci-blue
+spec:
+  gateways:
+    - test-ci-gateway
+  hosts:
+    - blue.app.com
+  http:
+    - route:
+      - destination:
+          host: release-name-test-ci.application.svc.cluster.local
+          port:
+            number: 80
+
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: test-ci-green
+spec:
+  gateways:
+    - test-ci-gateway
+  hosts:
+    - green.app.com
+  http:
+    - route:
+      - destination:
+          host: release-name-test-ci-preview.application.svc.cluster.local
+          port:
+            number: 80

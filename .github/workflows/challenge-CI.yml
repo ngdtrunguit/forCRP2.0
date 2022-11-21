@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "main" ]
     paths:
-      - "ci-cd-pipeline/**"
+      - "test-ci/**"
       - "!**/README.md"
   workflow_dispatch:
 
@@ -46,7 +46,7 @@ jobs:
 #     - name: Update Image Version in the related HelmChart values.yaml
 #       uses: fjogeleit/yaml-update-action@main
 #       with:
-#         valueFile: 'ci-cd-pipeline/values.yaml'
+#         valueFile: 'test-ci/values.yaml'
 #         branch: main
 #         targetBranch: main
 #         masterBranchName: main
@@ -55,7 +55,7 @@ jobs:
 #         message: 'Update CI Images' 
 #         changes: |
 #           {
-#             "ci-cd-pipeline/values.yaml": {
+#             "test-ci/values.yaml": {
 #               "image.tag": "${{ env.IMAGE_TAG }}"
 #             }
 #           }

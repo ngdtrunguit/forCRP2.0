@@ -1,4 +1,5 @@
-FROM nginx:mainline-alpine
-RUN rm /etc/nginx/conf.d/*
-ADD src/test.conf /etc/nginx/conf.d/
-ADD src/index.html /usr/share/nginx/html/
+FROM nginx:alpine
+RUN chmod g+rwx /var/cache/nginx/ /var/run /var/log/nginx
+COPY app/html /var/www/
+COPY app/nginx.conf /etc/nginx/nginx.conf
+EXPOSE 8000
