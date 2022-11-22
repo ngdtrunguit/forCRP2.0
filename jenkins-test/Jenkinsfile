@@ -72,7 +72,7 @@ spec:
         container(name: 'git') {
           withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
               sh """
-              apk update && apk add git
+              apk update && apk add git && apk add yq
               git init
               git config --global --add safe.directory /home/jenkins/agent/workspace/demo
               git clone https://github.com/ngdtrunguit/forCRP2.0.git
