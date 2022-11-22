@@ -40,7 +40,9 @@ spec:
     }
     stage('Kaniko Build & Push Image') {
       steps {
-        container('kaniko') {
+        // container('kaniko') {
+        container(name: 'kaniko', shell: '/busybox/sh') {
+
           script {
             sh 'ls'
             sh 'pwd'
@@ -52,7 +54,7 @@ spec:
             dir('jenkins-test') {
               sh 'pwd'
               sh 'ls'
-              sh '''
+              sh '''#!/busybox/sh
               /kaniko/executor --dockerfile Dockerfile \
                              --context `pwd` \
                              --destination=trungnguyenprojectcrp2.azurecr.io/test-ci:1.0}
