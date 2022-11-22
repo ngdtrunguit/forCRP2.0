@@ -1,0 +1,42 @@
+controller:
+  adminSecret: true
+  adminUser: admin
+  adminPassword: "Testing123"
+  numExecutors: 0
+  installPlugins:
+    - configuration-as-code:latest
+    - kubernetes:latest
+    - workflow-aggregator:latest
+    - workflow-job:latest
+    - credentials-binding:latest
+    - git:latest
+    - git-client:latest
+    - git-server:latest
+    - greenballs:latest
+    - blueocean:latest
+    - strict-crumb-issuer:latest
+    - http_request:latest
+    - matrix-project:latest
+    - jquery:latest
+    - artifactory:latest
+    - jdk-tool:latest
+    - matrix-auth:latest
+    - credentials:latest
+    - pipeline-utility-steps:latest
+    - docker-workflow:latest
+    - command-launcher:latest
+    - github-branch-source:latest
+  overwritePlugins: true
+persistence:
+  enabled: true
+  storageClass: ""
+  annotations: {}
+  accessMode: "ReadWriteOnce"
+  size: "5Gi"
+  volumes:
+  #  - name: nothing
+  #    emptyDir: {}
+  mounts:
+  #  - mountPath: /var/nothing
+  #    name: nothing
+  #    readOnly: true
