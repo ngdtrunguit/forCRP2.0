@@ -4,30 +4,27 @@ pipeline {
       yaml """
 apiVersion: v1
 kind: Pod
-metadata:
-  name: kaniko
 spec:
   containers:
-  - name: kubectl
-    image: joshendriks/alpine-k8s
-    command:
-    - /bin/cat
-    tty: true    
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
+    imagePullPolicy: Always
     command:
-    - /busybox/cat
-    tty: true
+    - sleep
+    args:
+    - 9999999
     volumeMounts:
-      - name: kaniko-secret
+      - name: jenkins-docker-cfg
         mountPath: /kaniko/.docker
   volumes:
-    - name: kaniko-secret
-      secret:
-        secretName: kanikosecret
-        items:
-          - key: .dockerconfigjson
-            path: config.json
+  - name: jenkins-docker-cfg
+    projected:
+      sources:
+      - secret:
+          name: docker-credentials
+          items:
+            - key: .dockerconfigjson
+              path: config.json
 """
     }
   }
