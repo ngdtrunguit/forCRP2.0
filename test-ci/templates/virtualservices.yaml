@@ -7,7 +7,7 @@ spec:
     istio: ingressgateway
   servers:
     - hosts:
-        - "*"
+        - blue.app.com
       port:
         name: http
         number: 8000
