@@ -1,0 +1,80 @@
+pipeline {
+  agent {
+    kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kaniko
+spec:
+  containers:
+  - name: kubectl
+    image: joshendriks/alpine-k8s
+    command:
+    - /bin/cat
+    tty: true    
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    command:
+    - /busybox/cat
+    tty: true
+    volumeMounts:
+      - name: kaniko-secret
+        mountPath: /kaniko/.docker
+  volumes:
+    - name: kaniko-secret
+      secret:
+        secretName: kanikosecret
+        items:
+          - key: .dockerconfigjson
+            path: config.json
+"""
+    }
+  }
+
+  stages {
+    stage ('checkout'){
+      steps {
+        checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'jenkins-test']]]], userRemoteConfigs: [[url: 'https://github.com/ngdtrunguit/forCRP2.0.git']]])
+      }
+    }
+    stage('Kaniko Build & Push Image') {
+      steps {
+        // container('kaniko') {
+        container(name: 'kaniko', shell: '/busybox/sh') {
+
+          script {
+            sh 'ls'
+            sh 'pwd'
+            // sh '''
+            // /kaniko/executor --dockerfile `pwd`/Dockerfile \
+            //                  --context `pwd` \
+            //                  --destination=trungnguyenprojectcrp2.acr.io/test-ci:1.0}
+            // '''
+            dir('jenkins-test') {
+              sh 'pwd'
+              sh 'ls'
+              sh '''#!/busybox/sh
+              /kaniko/executor --dockerfile Dockerfile \
+                             --context `pwd` \
+                             --destination=trungnguyenprojectcrp2/testci:1.0}
+              '''
+            }
+          }
+        }
+      }
+    }
+
+    // stage('Deploy App to Kubernetes') {     
+    //   steps {
+    //     container('kubectl') {
+    //       withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+    //         sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" myweb.yaml'
+    //         sh 'kubectl apply -f myweb.yaml'
+    //       }
+    //     }
+    //   }
+    // }
+  
+  }
+}
