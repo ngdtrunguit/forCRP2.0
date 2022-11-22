@@ -10,7 +10,7 @@ spec:
         - "*"
       port:
         name: http
-        number: 8000
+        number: 80
         protocol: HTTP
 
 ---
