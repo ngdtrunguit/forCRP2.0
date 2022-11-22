@@ -65,23 +65,24 @@ spec:
           }
         }
       }
-      stage('Update tag in YAML') {
-        steps {
-          container(name: 'kaniko', shell: '/busybox/sh') {
-                sh """
-                git clone https://github.com/ngdtrunguit/forCRP2.0.git
-                cd jenkins-test/helm/
-                
-                def text = readFile file: "values.yaml"
-                text = text.replaceAll("%tag%", "1.0.${${BUILD_NUMBER}}") 
-                export BUILD_NUMBER=${BUILD_NUMBER}
-                git add . -m "Update app image tag to ${BUILD_NUMBER}"
-                git push origin main
-                """
-          }
+    }
+    stage('Update tag in YAML') {
+      steps {
+        container(name: 'kaniko', shell: '/busybox/sh') {
+              sh """
+              git clone https://github.com/ngdtrunguit/forCRP2.0.git
+              cd jenkins-test/helm/
+              
+              def text = readFile file: "values.yaml"
+              text = text.replaceAll("%tag%", "1.0.${${BUILD_NUMBER}}") 
+              export BUILD_NUMBER=${BUILD_NUMBER}
+              git add . -m "Update app image tag to ${BUILD_NUMBER}"
+              git push origin main
+              """
         }
       }
     }
+  }
 
     // stage('Deploy App to Kubernetes') {     
     //   steps {
@@ -94,5 +95,4 @@ spec:
     //   }
     // }
   
-  }
 }
