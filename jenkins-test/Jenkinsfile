@@ -36,23 +36,20 @@ spec:
     stage ('checkout'){
       steps {
         checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'jenkins-test']]]], userRemoteConfigs: [[url: 'https://github.com/ngdtrunguit/forCRP2.0.git']]])
-        script {
-          sh 'pwd'
-          sh 'ls'
-        }
       }
     }
     stage('Kaniko Build & Push Image') {
       steps {
         container('kaniko') {
           script {
+            sh 'ls'
             sh 'pwd'
             // sh '''
             // /kaniko/executor --dockerfile `pwd`/Dockerfile \
             //                  --context `pwd` \
             //                  --destination=trungnguyenprojectcrp2.acr.io/test-ci:1.0}
             // '''
-            dir('test-ci') {
+            dir('forCRP2.0/test-ci') {
               sh 'pwd'
               sh 'ls'
               sh '''
