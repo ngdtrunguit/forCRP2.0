@@ -73,6 +73,7 @@ spec:
           withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
               sh """
               apk update && apk add git
+              git init
               git config user.email ngdtrunguit@gmail.com
               git config user.name ngdtrunguit
               git clone https://github.com/ngdtrunguit/forCRP2.0.git
