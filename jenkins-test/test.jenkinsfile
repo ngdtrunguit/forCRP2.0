@@ -1,68 +1,43 @@
 pipeline {
+
+  options {
+    ansiColor('xterm')
+  }
+
   agent {
     kubernetes {
-      label 'dind'
-      defaultContainer 'docker'
-      yaml """
----
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    app: jenkins
-spec:
-  containers:
-    - name: docker
-      image: docker:latest
-      command:
-        - /bin/cat
-      tty: true
-      volumeMounts:
-        - name: dind-certs
-          mountPath: /certs
-      env:
-        - name: DOCKER_TLS_CERTDIR
-          value: /certs
-        - name: DOCKER_CERT_PATH
-          value: /certs
-        - name: DOCKER_TLS_VERIFY
-          value: 1
-        - name: DOCKER_HOST
-          value: tcp://localhost:2376
-    - name: dind
-      image: docker:dind
-      securityContext:
-        privileged: true
-      env:
-        - name: DOCKER_TLS_CERTDIR
-          value: /certs
-      volumeMounts:
-        - name: dind-storage
-          mountPath: /var/lib/docker
-        - name: dind-certs
-          mountPath: "/certs/client"
-  volumes:
-    - name: dind-storage
-      emptyDir: {}
-    - name: dind-certs
-      emptyDir: {}
-"""
+      yamlFile 'builder.yaml'
     }
   }
+
   stages {
-    stage('Git Checkout') {
+
+    stage('Kaniko Build & Push Image') {
       steps {
-            checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/ngdtrunguit/forCRP2.0.git']]])
-      }
-    }
-    stage('Build-Docker-Image') {
-      steps {
-        container('docker') {
-          sh 'pwd'
-          sh 'cd test-ci'  
-          sh 'docker build -t test-ci/testing-ci:latest .'
+        container('kaniko') {
+          script {
+            sh 'pwd'
+            dir('test-ci') 
+            sh '''
+            /kaniko/executor --dockerfile `pwd`/Dockerfile \
+                             --context `pwd` \
+                             --destination=trungnguyenprojectcrp2.acr.io/test-ci:1.0}
+            '''
+          }
         }
       }
     }
+
+    // stage('Deploy App to Kubernetes') {     
+    //   steps {
+    //     container('kubectl') {
+    //       withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+    //         sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" myweb.yaml'
+    //         sh 'kubectl apply -f myweb.yaml'
+    //       }
+    //     }
+    //   }
+    // }
+  
   }
 }
