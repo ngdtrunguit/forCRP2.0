@@ -80,7 +80,8 @@ spec:
               git config user.email ngdtrunguit@gmail.com
               git config user.name ngdtrunguit
               cat values.yaml
-              yq eval ".image.tag = \"1.0.${BUILD_NUMBER}\""  -i values.yaml
+              export BUILD_NUMBER=1.0.${BUILD_NUMBER}
+              yq eval ".image.tag = \"${BUILD_NUMBER}\""  -i values.yaml
               cat values.yaml
               git add . -m "Update app image tag to ${BUILD_NUMBER}"
               git push https://${GIT_PASSWORD}@github.com/${GIT_USERNAME}forCRP2.0.git HEAD:main
