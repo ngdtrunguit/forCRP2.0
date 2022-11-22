@@ -1,0 +1,89 @@
+pipeline {
+  agent {
+    kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kaniko
+spec:
+  containers:
+  - name: docker
+    image: docker:latest
+  - name: kubectl
+    image: joshendriks/alpine-k8s
+    command:
+    - /bin/cat
+    tty: true    
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:debug
+    command:
+    - /busybox/cat
+    tty: true
+    volumeMounts:
+      - name: kaniko-secret
+        mountPath: /kaniko/.docker
+  volumes:
+    - name: kaniko-secret
+      secret:
+        secretName: kanikosecret
+        items:
+          - key: .dockerconfigjson
+            path: config.json
+"""
+    }
+  }
+  parameters {
+  booleanParam(defaultValue: true, name: 'PUSH_TO_ACR', description: '')
+  booleanParam(defaultValue: false, name: 'SONARQUBE_SCAN', description: '')
+  booleanParam(defaultValue: false, name: 'BLACKDUCK_SCAN', description: '')
+  booleanParam(defaultValue: false, name: 'DEPENDENCE_SCAN', description: '')
+  string(defaultValue: 'test-ci', name: 'COMPONENT_NAME', description: 'Name of Component.')
+  string(defaultValue: 'main', name: 'SCM_BRANCH', description: 'Pipeline source branch for this build')
+  string(defaultValue: 'trungnguyenprojectcrp2.azurecr.io', name: 'ACR_REPO', description: 'Set ECR docker registry.')
+  string(defaultValue: '1.0', name: 'BUILD_NUMBER', description: 'Build Number.')
+
+  }
+
+  stages {
+    stage ('checkout'){
+      steps {
+        checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'jenkins-test']]]], userRemoteConfigs: [[url: 'https://github.com/ngdtrunguit/forCRP2.0.git']]])
+      }
+    }
+    stage ('Build Docker image') {    
+			steps {
+					sh """
+						docker build --no-cache -t ${params.ACR_REPO}/${params.COMPONENT_NAME}:${params.BUILD_NUMBER} .
+					"""
+				}
+    }
+    stage ('Push_to_ACR') {
+      when {
+        expression { params.PUSH_TO_ACR == true }
+      }
+        steps {
+            withCredentials([usernamePassword(credentialsId: 'acr', usernameVariable: 'ArtifactoryUsername', passwordVariable:'ArtifactoryPassword')]) {
+      sh """
+        cd ${PROJECT_HOME}
+        docker login ${params.ACR_REPO} -u ${ArtifactoryUsername} -p ${ArtifactoryPassword}
+        docker push ${params.ACR_REPO}/${params.COMPONENT_NAME}:${params.BUILD_NUMBER}
+      """
+      }
+      }
+    }
+    }
+
+
+    // stage('Deploy App to Kubernetes') {     
+    //   steps {
+    //     container('kubectl') {
+    //       withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
+    //         sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" myweb.yaml'
+    //         sh 'kubectl apply -f myweb.yaml'
+    //       }
+    //     }
+    //   }
+    // }
+  
+}
