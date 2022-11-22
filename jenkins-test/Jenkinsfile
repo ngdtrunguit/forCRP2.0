@@ -76,11 +76,10 @@ spec:
               cd jenkins-test/helm/
               
               def text = readFile file: "values.yaml"
-              text = text.replaceAll("%tag%", "1.0.${${BUILD_NUMBER}}") 
-              export BUILD_NUMBER=${BUILD_NUMBER}
+              text = text.replaceAll("%tag%", "1.0.${BUILD_NUMBER}") 
               git add . -m "Update app image tag to ${BUILD_NUMBER}"
-              git push origin main
-              git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/forCRP2.0.git HEAD:main"
+              git push https://${GIT_PASSWORD}@github.com/${GIT_USERNAME}forCRP2.0.git HEAD:main
+
               """
         }
       }
