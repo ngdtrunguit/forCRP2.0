@@ -34,7 +34,9 @@ spec:
 
   stages {
     stage ('checkout'){
-      checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'jenkins-test']]]], userRemoteConfigs: [[url: 'https://github.com/ngdtrunguit/forCRP2.0.git']]])
+      steps {
+        checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'jenkins-test']]]], userRemoteConfigs: [[url: 'https://github.com/ngdtrunguit/forCRP2.0.git']]])
+      }
     }
     stage('Kaniko Build & Push Image') {
       steps {
