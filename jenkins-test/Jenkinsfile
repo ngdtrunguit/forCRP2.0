@@ -74,10 +74,12 @@ spec:
               sh """
               apk update && apk add git
               git init
+              git status
+              pwd
               git clone https://github.com/ngdtrunguit/forCRP2.0.git
+              cd jenkins-test/helm/
               git config user.email ngdtrunguit@gmail.com
               git config user.name ngdtrunguit
-              cd jenkins-test/helm/
               cat values.yaml
               yq eval ".image.tag = \"1.0.${BUILD_NUMBER}\""  -i values.yaml
               cat values.yaml"
