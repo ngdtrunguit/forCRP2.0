@@ -7,7 +7,7 @@ kind: Pod
 spec:
   containers:
   - name: yq
-    image: guidoffm/yq-git:v4.6.2
+    image: quay.io/rhdevelopers/origin-cli-yq-jq
   - name: kubectl
     image: joshendriks/alpine-k8s
     command:
