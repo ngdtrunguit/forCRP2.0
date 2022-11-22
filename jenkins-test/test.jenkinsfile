@@ -39,12 +39,13 @@ spec:
         container('kaniko') {
           script {
             sh 'pwd'
-            dir('test-ci') 
-            sh '''
-            /kaniko/executor --dockerfile `pwd`/Dockerfile \
+            dir('test-ci') {
+              sh '''
+              /kaniko/executor --dockerfile `pwd`/Dockerfile \
                              --context `pwd` \
                              --destination=trungnguyenprojectcrp2.acr.io/test-ci:1.0}
-            '''
+              '''
+            }
           }
         }
       }
