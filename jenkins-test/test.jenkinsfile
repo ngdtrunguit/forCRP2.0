@@ -59,7 +59,7 @@ spec:
       steps {
         container('docker') {
           sh 'pwd'
-          sh 'cd /test-ci'  
+          sh 'cd test-ci'  
           sh 'docker build -t test-ci/testing-ci:latest .'
         }
       }
