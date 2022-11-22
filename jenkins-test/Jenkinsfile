@@ -72,6 +72,7 @@ spec:
         container(name: 'git') {
           withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
               sh """
+              sudo apt-get update -y && sudo apt-get install git -y
               git config user.email ngdtrunguit@gmail.com
               git config user.name ngdtrunguit
               git clone https://github.com/ngdtrunguit/forCRP2.0.git
