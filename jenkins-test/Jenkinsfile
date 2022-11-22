@@ -53,9 +53,8 @@ spec:
               sh 'ls'
               sh '''#!/busybox/sh
               echo "FROM jenkins/inbound-agent:latest" > Dockerfile
-              /kaniko/executor --dockerfile Dockerfile \
-                             --context `pwd` \
-                             --destination=trungnguyenprojectcrp2.azurecr.io/testci:1.0}
+              /kaniko/executor --context `pwd` \
+                             --destination trungnguyenprojectcrp2.azurecr.io/testci:1.0
               '''
             }
           }
