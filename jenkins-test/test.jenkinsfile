@@ -40,7 +40,7 @@ spec:
         - name: dind-storage
           mountPath: /var/lib/docker
         - name: dind-certs
-          mountPath: /certs
+          mountPath: "/certs/client"
   volumes:
     - name: dind-storage
       emptyDir: {}
