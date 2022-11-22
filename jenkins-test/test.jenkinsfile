@@ -46,8 +46,7 @@ spec:
             // '''
             dir('test-ci') {
               sh '''
-              /kaniko/executor \
-                             --context `pwd` \
+              /kaniko/executor --context `pwd` \
                              --destination=trungnguyenprojectcrp2.acr.io/test-ci:1.0}
               '''
           }
