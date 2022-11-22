@@ -57,7 +57,7 @@ spec:
               sh '''#!/busybox/sh
               /kaniko/executor --dockerfile Dockerfile \
                              --context `pwd` \
-                             --destination=trungnguyenprojectcrp2.azurecr.io/test-ci:1.0}
+                             --destination=trungnguyenprojectcrp2/testci:1.0}
               '''
             }
           }
