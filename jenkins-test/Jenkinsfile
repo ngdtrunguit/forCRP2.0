@@ -75,7 +75,6 @@ spec:
               git clone https://github.com/ngdtrunguit/forCRP2.0.git
               cd jenkins-test/helm/
               cat values.yaml
-              sed -i 's+raj80dockerid/test.*+raj80dockerid/test:${DOCKERTAG}+g' deployment.yaml"
               sed -i 's+1.0.*+${BUILD_NUMBER}+g' values.yaml"
               cat values.yaml"
               git add . -m "Update app image tag to ${BUILD_NUMBER}"
