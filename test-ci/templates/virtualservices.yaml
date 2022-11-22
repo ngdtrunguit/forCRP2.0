@@ -10,7 +10,7 @@ spec:
         - "*"
       port:
         name: http
-        number: 80
+        number: 8000
         protocol: HTTP
 
 ---
@@ -28,7 +28,7 @@ spec:
       - destination:
           host: release-name-test-ci.application.svc.cluster.local
           port:
-            number: 80
+            number: 8000
 
 
 ---
@@ -46,4 +46,4 @@ spec:
       - destination:
           host: release-name-test-ci-preview.application.svc.cluster.local
           port:
-            number: 80
+            number: 8000
