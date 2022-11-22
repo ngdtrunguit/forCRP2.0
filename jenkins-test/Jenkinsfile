@@ -68,8 +68,10 @@ spec:
     }
     stage('Update tag in YAML') {
       steps {
-        container(name: 'kaniko', shell: '/busybox/sh') {
+        withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
               sh """
+              git config user.email ngdtrunguit@gmail.com
+              git config user.name ngdtrunguit
               git clone https://github.com/ngdtrunguit/forCRP2.0.git
               cd jenkins-test/helm/
               
@@ -78,6 +80,7 @@ spec:
               export BUILD_NUMBER=${BUILD_NUMBER}
               git add . -m "Update app image tag to ${BUILD_NUMBER}"
               git push origin main
+              git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/${GIT_USERNAME}/forCRP2.0.git HEAD:main"
               """
         }
       }
