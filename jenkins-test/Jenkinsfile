@@ -7,7 +7,7 @@ kind: Pod
 spec:
   containers:
   - name: git
-    image: mikefarah/yq
+    image: linuxserver/yq
   - name: kubectl
     image: joshendriks/alpine-k8s
     command:
@@ -72,6 +72,7 @@ spec:
         container(name: 'git') {
           withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
               sh """
+              apk update && apk add git
               git config user.email ngdtrunguit@gmail.com
               git config user.name ngdtrunguit
               git clone https://github.com/ngdtrunguit/forCRP2.0.git
