@@ -74,8 +74,7 @@ spec:
               sh """
               apk update && apk add git
               git init
-              git status
-              pwd
+              git config --global --add safe.directory /home/jenkins/agent/workspace/demo
               git clone https://github.com/ngdtrunguit/forCRP2.0.git
               cd jenkins-test/helm/
               git config user.email ngdtrunguit@gmail.com
