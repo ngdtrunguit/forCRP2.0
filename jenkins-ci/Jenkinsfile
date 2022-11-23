@@ -69,22 +69,24 @@ spec:
       steps {
         container(name: 'git') {
           withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-              sh """
-              apk update && apk add git && apk add yq
-              git init
-              git config --global --add safe.directory /home/jenkins/agent/workspace/demo
-              git clone https://github.com/ngdtrunguit/forCRP2.0.git
-              pwd
-              ls
-              git config user.email ngdtrunguit@gmail.com
-              git config user.name ngdtrunguit
-              cat values.yaml
-              yq eval '.image.tag = env(TAG)' -i values.yaml
-              cat values.yaml
-              git add .
-              git commit -m "Update app image tag to $TAG"
-              git push https://${GIT_PASSWORD}@github.com/${GIT_USERNAME}/forCRP2.0.git HEAD:main
-              """
+              sh 'apk update && apk add git && apk add yq'
+              sh 'git init'
+              sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/demo'
+              sh 'git clone https://github.com/ngdtrunguit/forCRP2.0.git'
+              sh 'pwd'
+              dir ('forCRP2.0/test-ci') {
+                sh '''
+                git config user.email ngdtrunguit@gmail.com
+                git config user.name ngdtrunguit
+                cat values.yaml
+                yq eval '.image.tag = env(TAG)' -i values.yaml
+                cat values.yaml
+                git add .
+                git commit -m "Update app image tag to $TAG"
+                git push https://${GIT_PASSWORD}@github.com/${GIT_USERNAME}/forCRP2.0.git HEAD:main
+                '''
+              }
+
         }
       }
     }
