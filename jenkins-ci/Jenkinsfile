@@ -20,11 +20,11 @@ spec:
     args:
     - infinity
     volumeMounts:
-      - name: jenkins-kaniko
+      - name: jenkins-kanikoa
         mountPath: /kaniko/.docker
   restartPolicy: Never
   volumes:
-  - name: jenkins-kaniko
+  - name: jenkins-kanikoa
     projected:
       sources:
       - secret:
@@ -77,8 +77,10 @@ spec:
               sh 'ls'
               sh 'ls forCRP2.0/'
               sh 'cd forCRP2.0/test-ci'
+              sh 'ls'
+              sh 'git pull origin main'
               sh 'git config user.email ngdtrunguit@gmail.com'
-              sh ' git config user.name ngdtrunguit'
+              sh 'git config user.name ngdtrunguit'
               sh 'cat values.yaml'
               sh 'yq eval '.image.tag = env(TAG)' -i values.yaml'
               sh 'cat values.yaml'
