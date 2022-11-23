@@ -8,23 +8,18 @@ spec:
   containers:
   - name: git
     image: linuxserver/yq
-    command:
-    - sleep
-    args:
-    - infinity
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
     imagePullPolicy: Always
     command:
     - sleep
     args:
-    - infinity
+    - 9999999
     volumeMounts:
-      - name: jenkins-kanikoa
+      - name: jenkins-docker-cfg
         mountPath: /kaniko/.docker
-  restartPolicy: Never
   volumes:
-  - name: jenkins-kanikoa
+  - name: jenkins-docker-cfg
     projected:
       sources:
       - secret:
