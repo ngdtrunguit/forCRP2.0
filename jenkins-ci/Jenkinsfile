@@ -75,13 +75,13 @@ spec:
               sh 'ls'
               sh 'cd /test-ci'
               sh 'git config user.email ngdtrunguit@gmail.com'
-               sh ' git config user.name ngdtrunguit'
-                sh 'cat values.yaml'
-                sh'yq eval '.image.tag = env(TAG)' -i values.yaml'
-                sh'cat values.yaml'
-                sh'git add .'
-                sh'git commit -m "Update app image tag to $TAG"'
-                sh'git push https://${GIT_PASSWORD}@github.com/${GIT_USERNAME}/forCRP2.0.git HEAD:main'
+              sh ' git config user.name ngdtrunguit'
+              sh 'cat values.yaml'
+              sh'yq eval '.image.tag = env(TAG)' -i values.yaml'
+              sh'cat values.yaml'
+              sh'git add .'
+              sh'git commit -m "Update app image tag to $TAG"'
+              sh'git push https://${GIT_PASSWORD}@github.com/${GIT_USERNAME}/forCRP2.0.git HEAD:main'
               }
 
         }
@@ -100,4 +100,3 @@ spec:
     //   }
     // }
   }
-}
