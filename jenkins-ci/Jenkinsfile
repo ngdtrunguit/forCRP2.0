@@ -11,20 +11,20 @@ spec:
     command:
     - sleep
     args:
-    - 9999999
+    - infinity
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
     imagePullPolicy: Always
     command:
     - sleep
     args:
-    - 9999999
+    - infinity
     volumeMounts:
-      - name: jenkins-docker-cfg
+      - name: jenkins-kaniko
         mountPath: /kaniko/.docker
   restartPolicy: Never
   volumes:
-  - name: jenkins-docker-cfg
+  - name: jenkins-kaniko
     secret:
         secretName: docker-credentials
         items:
