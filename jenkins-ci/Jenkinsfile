@@ -4,10 +4,17 @@ pipeline {
       yaml """
 apiVersion: v1
 kind: Pod
+metadata:
+  annotations: 
+    sidecar.istio.io/inject: "false"
 spec:
   containers:
   - name: git
     image: linuxserver/yq
+    command:
+    - sleep
+    args:
+    - 9999999
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
     imagePullPolicy: Always
@@ -18,6 +25,7 @@ spec:
     volumeMounts:
       - name: jenkins-docker-cfg
         mountPath: /kaniko/.docker
+  restartPolicy: Never
   volumes:
   - name: jenkins-docker-cfg
     projected:
@@ -42,8 +50,15 @@ spec:
         container(name: 'kaniko', shell: '/busybox/sh') {
 
           script {
-            sh 'ls'
-            sh 'pwd'
+            // dir('jenkins-kind') {
+            //   sh 'pwd'
+            //   sh 'ls'
+            //   sh '''#!/busybox/sh
+            //   echo "FROM jenkins/inbound-agent:latest" > Dockerfile
+            //   /kaniko/executor --context `pwd` \
+            //                  --destination ngdtrunguit/test-ci:1.0.${BUILD_NUMBER}
+            //   '''
+            // }
             dir('jenkins-ci') {
               sh 'pwd'
               sh 'ls'
@@ -64,39 +79,26 @@ spec:
       steps {
         container(name: 'git') {
           withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-              sh 'apk update && apk add git && apk add yq'
-              sh 'git init'
-              sh 'git config --global --add safe.directory /home/jenkins/agent/workspace/demo'
-              sh 'git clone https://github.com/ngdtrunguit/forCRP2.0.git'
-              sh 'pwd'
-              sh 'ls'
-              sh 'ls forCRP2.0/'
-              sh 'cd forCRP2.0/test-ci'
-              sh 'ls'
-              sh 'git pull origin main'
-              sh 'git config user.email ngdtrunguit@gmail.com'
-              sh 'git config user.name ngdtrunguit'
-              sh 'cat values.yaml'
-              sh 'yq eval '.image.tag = env(TAG)' -i values.yaml'
-              sh 'cat values.yaml'
-              sh 'git add .'
-              sh 'git commit -m "Update app image tag to $TAG"'
-              sh 'git push https://${GIT_PASSWORD}@github.com/${GIT_USERNAME}/forCRP2.0.git HEAD:main'
-              }
-
+              sh """
+              apk update && apk add git && apk add yq
+              git init
+              git config --global --add safe.directory /home/jenkins/agent/workspace/demo
+              git clone https://github.com/ngdtrunguit/forCRP2.0.git
+              cd jenkins-ci/helm/
+              git config user.email ngdtrunguit@gmail.com
+              git config user.name ngdtrunguit
+              cat values.yaml
+              yq eval '.image.tag = env(TAG)' -i values.yaml
+              cat values.yaml
+              echo $TAG
+              git add . 
+              git commit -m "Update app image tag to $TAG"
+              git pull origin main
+              git push https://${GIT_PASSWORD}@github.com/${GIT_USERNAME}/forCRP2.0.git HEAD:main
+              """
         }
       }
     }
   }
-
-    // stage('Deploy App to Kubernetes') {     
-    //   steps {
-    //     container('kubectl') {
-    //       withCredentials([file(credentialsId: 'mykubeconfig', variable: 'KUBECONFIG')]) {
-    //         sh 'sed -i "s/<TAG>/${BUILD_NUMBER}/" myweb.yaml'
-    //         sh 'kubectl apply -f myweb.yaml'
-    //       }
-    //     }
-    //   }
-    // }
   }
+}

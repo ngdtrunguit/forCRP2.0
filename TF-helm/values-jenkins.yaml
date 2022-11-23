@@ -27,6 +27,36 @@ controller:
     - command-launcher:latest
     - github-branch-source:latest
   overwritePlugins: true
+
+  healthProbes: true
+  probes:
+    startupProbe:
+      httpGet:
+        path: '{{ default "" .Values.controller.jenkinsUriPrefix }}/login'
+        port: http
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 12
+    livenessProbe:
+      failureThreshold: 5
+      httpGet:
+        path: '{{ default "" .Values.controller.jenkinsUriPrefix }}/login'
+        port: http
+      periodSeconds: 10
+      timeoutSeconds: 5
+      # If Startup Probe is not supported on your Kubernetes cluster, you might want to use "initialDelaySeconds" instead.
+      # It delays the initial liveness probe while Jenkins is starting
+      initialDelaySeconds: 300
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: '{{ default "" .Values.controller.jenkinsUriPrefix }}/login'
+        port: http
+      periodSeconds: 10
+      timeoutSeconds: 5
+      # If Startup Probe is not supported on your Kubernetes cluster, you might want to use "initialDelaySeconds" instead.
+      # It delays the initial readyness probe while Jenkins is starting
+      initialDelaySeconds: 300
 persistence:
   enabled: true
   storageClass: ""
@@ -40,3 +70,16 @@ persistence:
   #  - mountPath: /var/nothing
   #    name: nothing
   #    readOnly: true
+agent:
+  enabled: true
+  image: "jenkins/jnlp-agent-docker"
+  tag: "latest"
+  runAsUser: 0
+  runAsGroup: 0
+  volumes: 
+   - type: HostPath
+     hostPath: /var/run/docker.sock
+     mountPath: /var/run/docker.sock
+   - type: HostPath
+     hostPath: /usr/bin/docker
+     mountPath: /usr/bin/docker
