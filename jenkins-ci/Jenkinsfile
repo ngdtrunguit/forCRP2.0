@@ -9,10 +9,6 @@ spec:
   - name: git
     image: linuxserver/yq
     imagePullPolicy: Always
-    command:
-    - sleep
-    args:
-    - 9999999
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
     imagePullPolicy: Always
@@ -74,10 +70,12 @@ spec:
               git init
               git config --global --add safe.directory /home/jenkins/agent/workspace/demo
               git clone https://github.com/ngdtrunguit/forCRP2.0.git
+              pwd
+              cd test-ci
               git config user.email ngdtrunguit@gmail.com
               git config user.name ngdtrunguit
               cat values.yaml
-              yq eval '.image.tag = env(TAG)' -i test-ci/values.yaml
+              yq eval '.image.tag = env(TAG)' -i values.yaml
               cat values.yaml
               git add .
               git commit -m "Update app image tag to $TAG"
