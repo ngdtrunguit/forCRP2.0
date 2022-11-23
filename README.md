@@ -6,7 +6,7 @@
 
 - Cloud provider: Azure
 - IaC tool: Terraform
-- Pipeline: Github Action, ArgoCD, Argo Rollouts
+- Pipeline: Github Action, ArgoCD, Argo Rollouts, Jenkins
 - Source code: Github
 - Container images: Azure Container Registry 
 
@@ -94,4 +94,13 @@ az ad sp create-for-rbac --name <name> --role Contributor --scopes /subscription
    - Promote new build on ArgoCD when testing activity done. 
   
 >  ArgoCD will automate sync and argo rollout will take care for Blue-Green deployment **(CD)**
+
+## Step 5: Another option for CI/CD pipeline (Jenkins) to handle the blue/green deployment strategy for application
+> This option use Jenkins to build CI and tag image build number and push it to ACR, update values.yaml in Helm repo, ArgoCD then trigger build to Kubernetes
+
+> Install Jenkins by null_resource
+```sh
+resource "null_resource" "jenkins" 
+```
+- Jenkins pipeline and CI stored in [jenkins-ci](https://github.com/ngdtrunguit/forCRP2.0/blob/main/jenkins-ci)
 
