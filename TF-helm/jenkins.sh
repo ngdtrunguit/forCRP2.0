@@ -4,7 +4,7 @@
 helm repo add jenkins https://charts.jenkins.io
 helm repo update
 
-helm -n ${namespace} upgrade --install jenkins -f jenkins/jenkins --values values-jenkins.yaml
+helm -n ${namespace} upgrade --install jenkins jenkins/jenkins --values values-jenkins.yaml
 
 
 kubectl create secret docker-registry docker-credentials \
