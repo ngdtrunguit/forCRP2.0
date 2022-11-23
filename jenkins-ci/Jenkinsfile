@@ -9,6 +9,10 @@ spec:
   - name: git
     image: linuxserver/yq
     imagePullPolicy: Always
+    command:
+    - sleep
+    args:
+    - 9999999
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
     imagePullPolicy: Always
