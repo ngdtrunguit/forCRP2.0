@@ -92,6 +92,20 @@ resource "kubernetes_namespace" "argo-rollouts" {
   }
 }
 
+resource "kubernetes_namespace" "jenkins" {
+  metadata {
+    annotations = {
+      name = "jenkins"
+    }
+
+    labels = {
+      istio-injection = "enabled"
+    }
+
+    name = "jenkins"
+  }
+}
+
 resource "helm_release" "istio-base" {
   name            = "istio-base"
   namespace       = kubernetes_namespace.istio_system.metadata.0.name
@@ -138,6 +152,25 @@ resource "null_resource" "argocd" {
     }
   }
   depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.argocd]
+}
+
+data "azurerm_container_registry" "acr" {
+  name                = "trungnguyenprojectcrp2"
+  resource_group_name = data.azurerm_resource_group.aks_rg.name
+}
+
+resource "null_resource" "jenkins" {
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+  provisioner "local-exec" {
+    command = file("./jenkins.sh")
+    environment = {
+      namespace = "${kubernetes_namespace.jenkins.metadata.0.name}"
+      acr_pwd   = "${data.azurerm_container_registry.acr.admin_password}"
+    }
+  }
+  depends_on = [helm_release.istio-base, helm_release.istiod, helm_release.istio-ingressgateway, kubernetes_namespace.jenkins]
 }
 
 data "external" "argocd_pwd" {
