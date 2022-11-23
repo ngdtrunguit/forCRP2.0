@@ -8,7 +8,6 @@ spec:
   containers:
   - name: git
     image: linuxserver/yq
-    imagePullPolicy: Always
     command:
     - sleep
     args:
@@ -23,6 +22,7 @@ spec:
     volumeMounts:
       - name: jenkins-docker-cfg
         mountPath: /kaniko/.docker
+  restartPolicy: Never
   volumes:
   - name: jenkins-docker-cfg
     secret:
