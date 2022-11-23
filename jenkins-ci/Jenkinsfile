@@ -25,11 +25,13 @@ spec:
   restartPolicy: Never
   volumes:
   - name: jenkins-kaniko
-    secret:
-        secretName: docker-credentials
-        items:
-        - key: .dockerconfigjson
-          path: config.json
+    projected:
+      sources:
+      - secret:
+          name: docker-credentials
+          items:
+            - key: .dockerconfigjson
+              path: config.json
 """
     }
   }
