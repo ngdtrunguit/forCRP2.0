@@ -75,6 +75,8 @@ spec:
               git config --global --add safe.directory /home/jenkins/agent/workspace/demo
               git clone https://github.com/ngdtrunguit/forCRP2.0.git
               pwd
+              ls
+              cd /forCRP2.0/test-ci
               git config user.email ngdtrunguit@gmail.com
               git config user.name ngdtrunguit
               cat values.yaml
