@@ -73,18 +73,16 @@ spec:
               sh 'git clone https://github.com/ngdtrunguit/forCRP2.0.git'
               sh 'pwd'
               sh 'ls'
-              dir ('forCRP2.0/test-ci')
-              {
-                sh 'ls'
-                sh 'git config user.email ngdtrunguit@gmail.com'
-                sh ' git config user.name ngdtrunguit'
-                sh 'cat values.yaml'
-                sh 'yq eval '.image.tag = env(TAG)' -i values.yaml'
-                sh 'cat values.yaml'
-                sh 'git add .'
-                sh 'git commit -m "Update app image tag to $TAG"'
-                sh 'git push https://${GIT_PASSWORD}@github.com/${GIT_USERNAME}/forCRP2.0.git HEAD:main'
-              }
+              sh 'cd forCRP2.0/test-ci/'
+              sh 'ls'
+              sh 'git config user.email ngdtrunguit@gmail.com'
+              sh ' git config user.name ngdtrunguit'
+              sh 'cat values.yaml'
+              sh 'yq eval '.image.tag = env(TAG)' -i values.yaml'
+              sh 'cat values.yaml'
+              sh 'git add .'
+              sh 'git commit -m "Update app image tag to $TAG"'
+              sh 'git push https://${GIT_PASSWORD}@github.com/${GIT_USERNAME}/forCRP2.0.git HEAD:main'
               }
 
         }
