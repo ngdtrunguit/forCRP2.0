@@ -160,9 +160,9 @@ data "azurerm_container_registry" "acr" {
 }
 
 resource "null_resource" "jenkins" {
-  triggers = {
-    always_run = "${timestamp()}"
-  }
+  # triggers = {
+  #   always_run = "${timestamp()}"
+  # }
   provisioner "local-exec" {
     command = file("./jenkins.sh")
     environment = {
