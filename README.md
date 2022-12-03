@@ -10,6 +10,7 @@
 - Source code: Github
 - Container images: Azure Container Registry 
 
+![CRP2.0 diagram](https://github.com/ngdtrunguit/forCRP2.0/blob/main/docs/CRP2-demo.png)
 
 > Note: github action will be trigger manually by workflow_dispatch or auto trigger by push/pull_requests
 > ```sh 
