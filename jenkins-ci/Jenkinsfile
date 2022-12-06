@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
   - name: git
-    image: linuxserver/yq
+    image: linuxserver/yqk
     command:
     - sleep
     args:
