@@ -3,7 +3,7 @@ variable "cluster_name" {
   default = "CRP2-AKS-Demo"
 }
 variable "kube_version" {
-  default = "1.22"
+  default = "1.23"
 }
 variable "dns_prefix" {
   default = "crp2"
