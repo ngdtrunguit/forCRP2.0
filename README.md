@@ -1,6 +1,6 @@
-# **forCRP2.0  AKS**
+# **forCR2.0  AKS** 
 
-## ---------CRP2 AKS (IaC, CICD, Service Mesh)------------ ##
+## ---------Container Runtime Platform AKS (IaC, CICD, Service Mesh)------------ ##
 
 ### _All the infrastructure and applications setup by Github Action with Terraform_
 
