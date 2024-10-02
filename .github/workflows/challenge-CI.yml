@@ -55,6 +55,6 @@ jobs:
           {
             "test-ci/values.yaml": {
               "image.tag": "${{ env.IMAGE_TAG }}"
-              "image.repository": "ngdtrunguit/test-ci"
+              "image.repository": "${{ secrets.DOCKERHUB_USERNAME }}/test-ci"
             }
           }
