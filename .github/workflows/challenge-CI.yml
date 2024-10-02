@@ -49,11 +49,11 @@ jobs:
         targetBranch: main
         masterBranchName: main
         commitChange: true
+        force: true
         token: ${{ secrets.GH_TOKEN }}
         message: 'Update CI Images' 
         changes: |
           {
-            "test-ci/values.yaml": {
               "image.tag": "${{ env.IMAGE_TAG }}"
               "image.repository": "${{ secrets.DOCKERHUB_USERNAME }}/test-ci"
             }
