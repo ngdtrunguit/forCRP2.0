@@ -47,12 +47,13 @@ jobs:
         valueFile: 'test-ci/values.yaml'
         branch: main
         targetBranch: main
-        createPR: true
+        masterBranchName: main
+        commitChange: true
         token: ${{ secrets.GH_TOKEN }}
-        description: Update CI 
         message: 'Update CI Images' 
         changes: |
           {
+            "test-ci/values.yaml": {
               "image.tag": "${{ env.IMAGE_TAG }}",
               "image.repository": "${{ secrets.DOCKERHUB_USERNAME }}/test-ci"
             }
